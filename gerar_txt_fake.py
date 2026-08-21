@@ -1,8 +1,6 @@
 """
 Gera um arquivo TXT fictício no mesmo layout esperado pelo script de
-conciliação (19 dígitos no início da linha + 9+ colunas separadas por
-espaço). Use este arquivo para testar/demonstrar o projeto no GitHub,
-nunca um arquivo real de produção.
+conciliação
 """
 
 import random
@@ -13,7 +11,7 @@ QTD_REFERENCIAS = 30
 
 
 def gerar_portador():
-    # 19 dígitos fictícios (não é um número de cartão real)
+    
     return "".join(str(random.randint(0, 9)) for _ in range(19))
 
 

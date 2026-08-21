@@ -9,9 +9,13 @@ sinal de inconsistência no processamento que precisa ser tratada.
 ## Problema que resolve
 
 Em operações de meios de pagamento, arquivos de retorno diário podem
-conter milhares de linhas. Conferir manualmente quais transações
-parceladas estão com registros faltando é lento e sujeito a erro
-humano. Este script automatiza 100% dessa checagem.
+conter milhares de linhas, valores, cabeçalhos e rodapés no momento da 
+extração. Visando esse cenário, eu busquei simplificar esse processo, 
+sabendo que no processamento e abertura de contratos parcelados, 
+sempre são embarcados os registros 00 e 01, que para quem esse problema
+pode vir a ocorrer, entende bem do que estou dizendo.
+Esse processo nada mais é que separar todas essas partes faltantes, assim poupando
+o tempo da procura e colocando esse tempo na análise.
 
 ## Como funciona
 
@@ -54,6 +58,7 @@ informação sensível removida.
 
 ## Possíveis melhorias futuras
 
-- Parametrizar o layout de colunas via arquivo de configuração
 - Suporte a múltiplos formatos de entrada (CSV, largura fixa)
-- Log estruturado em vez de prints
+- Log estruturado
+- Integração com outros relatórios que podem agregar valor ao que
+estamos extraindo.

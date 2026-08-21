@@ -1,129 +1,102 @@
 Conciliação de Parcelamentos — Detecção de Divergências
 
-Automação desenvolvida em Python para conferir grandes volumes de registros em arquivos TXT posicionais e identificar divergências entre parcelas relacionadas.
+Automação desenvolvida em Python para processar grandes volumes de registros em arquivos TXT posicionais e identificar divergências entre parcelas relacionadas.
 
-O script aplica uma regra de negócio segundo a qual cada registro de parcela inicial "00" deve possuir uma parcela subsequente "01" correspondente. Quando o par não é encontrado, a ocorrência é separada automaticamente para análise.
+O script localiza os registros válidos, extrai os campos necessários e aplica uma regra de negócio: cada parcela inicial "00" deve possuir uma parcela "01" correspondente. As inconsistências encontradas são organizadas automaticamente em uma planilha Excel pronta para análise.
 
-«Este projeto utiliza exclusivamente dados fictícios e anonimizados. Nomes, números, referências, valores e demais informações não possuem relação com dados reais.»
+Objetivo
 
-O problema
+Substituir a procura manual por parcelas ausentes por um fluxo automatizado de leitura, validação e conciliação.
 
-Arquivos de retorno podem conter milhares de linhas, além de cabeçalhos, rodapés, registros inválidos e informações que não fazem parte da análise.
+Dessa forma, o tempo deixa de ser gasto localizando registros em arquivos extensos e passa a ser direcionado à análise das divergências encontradas.
 
-Durante a conferência manual, seria necessário:
+Funcionalidades
 
-- Localizar os registros válidos;
-- Identificar as parcelas "00" e "01";
-- Relacionar os registros pela referência;
-- Comparar a quantidade de cada parcela;
-- Encontrar pares incompletos;
-- Organizar as divergências para análise.
+- Leitura de múltiplos arquivos TXT;
+- Processamento de grandes volumes de registros;
+- Remoção de cabeçalhos, rodapés e linhas inválidas;
+- Validação dos registros com expressões regulares;
+- Extração de campos em layout posicional;
+- Identificação das parcelas "00" e "01";
+- Agrupamento dos registros por referência;
+- Comparação automática entre parcelas relacionadas;
+- Detecção de pares incompletos;
+- Classificação do tipo de divergência;
+- Geração de uma planilha somente com as exceções;
+- Formatação automática do arquivo Excel;
+- Geração de dados fictícios para testes.
 
-Além de repetitivo, esse processo consome tempo que poderia ser direcionado à investigação das inconsistências encontradas.
+Fluxo do processamento
 
-A solução
-
-A automação percorre todos os arquivos TXT de uma pasta, extrai somente os registros relevantes, aplica as regras de validação e compara automaticamente as parcelas relacionadas.
-
-Ao final, é gerada uma planilha Excel contendo apenas as referências divergentes, já classificadas conforme o tipo de inconsistência identificada.
-
-Assim, a procura manual é substituída por um fluxo automatizado, enquanto a decisão sobre o tratamento permanece sob responsabilidade humana.
+Arquivos TXT
+    ↓
+Leitura dos registros
+    ↓
+Validação com Regex
+    ↓
+Extração dos campos
+    ↓
+Agrupamento por referência
+    ↓
+Comparação entre parcelas 00 e 01
+    ↓
+Identificação das divergências
+    ↓
+Geração do Excel
 
 Regra de negócio
 
-A validação considera a relação esperada entre dois registros:
+Para cada referência processada, o programa verifica a existência das parcelas relacionadas.
+
+O comportamento esperado é:
 
 Parcela 00 → Parcela 01 correspondente
 
-Quando a relação está completa:
+Exemplo de registro consistente:
 
 Referência A
 ├── Parcela 00
 └── Parcela 01
 
-O registro é considerado consistente e não aparece no relatório final.
-
-Quando uma das partes está ausente:
+Exemplo de divergência:
 
 Referência B
 ├── Parcela 00
 └── Parcela 01 ausente
 
-A referência é classificada como divergente e enviada para a planilha de saída.
+Quando a quantidade de parcelas "00" e "01" não corresponde, a referência é classificada como divergente e adicionada ao relatório final.
 
-Como funciona
+Etapas do tratamento
 
-O processamento acontece nas seguintes etapas:
+Durante o processamento, o script:
 
-1. Localiza todos os arquivos ".txt" da pasta definida;
-2. Realiza a leitura dos arquivos;
-3. Descarta cabeçalhos, rodapés e linhas fora do padrão;
-4. Valida os registros por meio de expressões regulares;
+1. Localiza os arquivos ".txt" na pasta definida;
+2. Lê e percorre os registros encontrados;
+3. Ignora cabeçalhos, rodapés e linhas fora do padrão;
+4. Valida cada linha com expressões regulares;
 5. Extrai os campos necessários para a conciliação;
-6. Identifica as parcelas "00" e "01";
-7. Agrupa os registros por uma referência comum;
-8. Compara a quantidade de parcelas de cada grupo;
-9. Classifica as divergências encontradas;
-10. Gera uma planilha Excel pronta para análise.
-
-Fluxo do processamento
-
-Arquivos TXT
-      ↓
-Leitura dos registros
-      ↓
-Validação com Regex
-      ↓
-Extração dos campos
-      ↓
-Agrupamento por referência
-      ↓
-Comparação entre 00 e 01
-      ↓
-Identificação das divergências
-      ↓
-Relatório Excel
-
-Recursos do projeto
-
-- Processamento de múltiplos arquivos TXT;
-- Tratamento de grandes volumes de registros;
-- Validação de linhas com expressões regulares;
-- Extração de dados em formato posicional;
-- Agrupamento por referência;
-- Comparação automática entre parcelas;
-- Identificação de pares incompletos;
-- Classificação do tipo de divergência;
-- Exportação apenas das exceções encontradas;
-- Cabeçalho formatado em negrito;
-- Filtros automáticos;
-- Ajuste da largura das colunas;
-- Base sintética para testes seguros.
+6. Identifica o número da parcela;
+7. Agrupa os registros pela referência correspondente;
+8. Compara a quantidade de parcelas "00" e "01";
+9. Separa somente as referências divergentes;
+10. Gera a planilha Excel formatada.
 
 Tecnologias utilizadas
 
-Tecnologia| Aplicação
-Python 3| Desenvolvimento da automação
-pandas| Organização, agrupamento e comparação dos registros
-openpyxl| Geração e formatação da planilha Excel
-Regex ("re")| Validação e extração dos registros
-pathlib| Localização e manipulação dos arquivos
+- Python
+- pandas
+- openpyxl
+- Expressões regulares — Regex
+- pathlib
 
 Estrutura do projeto
 
-conciliacao-parcelamentos/
+projeto/
 ├── parcelado.py
 ├── gerar_dados_fake.py
 ├── exemplo_fake.txt
 ├── requirements.txt
 └── README.md
-
-Arquivo| Descrição
-"parcelado.py"| Executa a conciliação e gera o relatório
-"gerar_dados_fake.py"| Cria uma base inteiramente sintética para testes
-"exemplo_fake.txt"| Exemplo fictício de arquivo de entrada
-"requirements.txt"| Dependências necessárias para execução
-"README.md"| Documentação do projeto
 
 Como executar
 
@@ -150,82 +123,76 @@ source .venv/bin/activate
 
 pip install pandas openpyxl
 
-Ou, caso o projeto possua o arquivo de dependências:
+Ou utilize o arquivo de dependências:
 
 pip install -r requirements.txt
 
-5. Gere uma base fictícia
+5. Gere o arquivo de exemplo
 
 python gerar_dados_fake.py
 
-Esse comando cria um arquivo de exemplo com registros sintéticos, incluindo casos consistentes e divergentes.
+Esse comando cria o arquivo "exemplo_fake.txt", contendo registros sintéticos para demonstrar o funcionamento da conciliação.
 
-6. Execute a conciliação
+6. Execute o processamento
 
 python parcelado.py
 
 Resultado
 
-Após o processamento, o programa gera o arquivo:
+O programa gera automaticamente o arquivo:
 
 DIVERGENCIAS_PARCELADO.xlsx
 
-A planilha contém somente as referências que não atenderam à regra de conciliação, permitindo que a análise seja concentrada nas exceções.
+A planilha apresenta somente as referências que quebraram a regra de conciliação.
 
-Exemplo conceitual:
+Exemplo:
 
-Referência| Parcela 00| Parcela 01| Resultado
-REF-0001| 1| 1| Consistente
-REF-0002| 1| 0| Falta parcela 01
-REF-0003| 0| 1| Falta parcela 00
+Referência| Parcela 00| Parcela 01| Divergência
+REF-0001| 1| 0| Parcela 01 ausente
+REF-0002| 0| 1| Parcela 00 ausente
+REF-0003| 2| 1| Quantidade incompatível
 
-Os nomes, valores e referências apresentados acima são exclusivamente ilustrativos.
+A saída também inclui:
 
-Sobre os dados de exemplo
+- Cabeçalhos destacados;
+- Filtros automáticos;
+- Colunas ajustadas ao conteúdo;
+- Indicação do tipo de divergência;
+- Apenas os registros que precisam de análise.
 
-O arquivo "exemplo_fake.txt", criado por "gerar_dados_fake.py", contém dados inteiramente sintéticos.
+Diferenciais técnicos
 
-Embora preserve uma estrutura compatível com o funcionamento do algoritmo, ele não reproduz:
+O projeto combina processamento em lote, expressões regulares e regras de negócio para transformar arquivos TXT extensos em uma lista objetiva de exceções.
 
-- Dados pessoais;
-- Números de contas ou cartões reais;
+Em vez de exigir a conferência manual de todos os registros, a automação filtra os casos consistentes e direciona para análise humana somente as referências que apresentam divergências.
+
+Sobre os dados
+
+Todos os arquivos utilizados neste repositório contêm dados inteiramente sintéticos e anonimizados.
+
+O arquivo "exemplo_fake.txt", gerado pelo script "gerar_dados_fake.py", mantém apenas uma estrutura fictícia compatível com o funcionamento da automação.
+
+O projeto não contém:
+
+- Dados pessoais reais;
+- Números de contas ou cartões;
 - Referências internas;
 - Valores de produção;
 - Nomes de empresas ou instituições;
-- Arquivos operacionais reais;
+- Arquivos operacionais;
 - Informações confidenciais de terceiros.
-
-O projeto foi reconstruído para fins de portfólio e demonstração técnica, mantendo apenas a lógica genérica de processamento, conciliação e detecção de divergências.
-
-Conhecimentos demonstrados
-
-Este projeto demonstra a aplicação prática de:
-
-- Leitura e tratamento de arquivos semiestruturados;
-- Processamento de dados em lote;
-- Expressões regulares;
-- Regras de negócio;
-- Validação e conciliação de registros;
-- Detecção de inconsistências;
-- Manipulação de dados com pandas;
-- Geração automatizada de relatórios;
-- Separação entre processamento automático e análise humana.
 
 Possíveis melhorias
 
 - Suporte a arquivos CSV e outros layouts posicionais;
 - Parametrização das regras de conciliação;
-- Processamento de arquivos em subpastas;
-- Criação de logs estruturados;
-- Registro de arquivos processados e rejeitados;
-- Geração de resumo executivo;
-- Painel com indicadores de divergência;
+- Geração de logs estruturados;
 - Testes automatizados;
+- Resumo executivo do processamento;
+- Painel com indicadores de divergências;
 - Interface para seleção dos arquivos;
-- Integração com outros relatórios complementares.
+- Integração com relatórios complementares.
 
-Aviso de privacidade
+Aviso
 
-Este repositório não contém código proprietário, dados operacionais reais ou informações capazes de identificar pessoas, empresas ou instituições.
-
-Todos os exemplos foram criados exclusivamente para demonstrar conhecimentos em Python, tratamento de dados e automação de processos.
+Este projeto foi reconstruído exclusivamente para fins educacionais e de portfólio. Sua lógica foi generalizada, e todos os dados, nomes, formatos e referências apresentados são fictícios ou anonimizados.
